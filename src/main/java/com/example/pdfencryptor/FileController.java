@@ -6,7 +6,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,11 +15,6 @@ public class FileController {
 
     @Autowired
     private EncryptionService encryptionService;
-
-    @GetMapping("/")
-    public String index() {
-        return "index"; // Returns index.html
-    }
 
     @PostMapping("/upload")
     public ResponseEntity<ByteArrayResource> uploadFile(
