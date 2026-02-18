@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure PDF Encryptor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding-top: 50px;
+        }
+        .card {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background-color: #0d6efd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center bg-primary text-white">
+                    <h3>PDF Encryptor</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/upload" method="post" enctype="multipart/form-data">
+                        
+                        <div class="mb-3">
+                            <label for="file" class="form-label">Select PDF File</label>
+                            <input class="form-control" type="file" id="file" name="file" accept=".pdf" required>
+                        </div>
+
+                        <fieldset class="mb-3">
+                            <legend class="col-form-label pt-0">Encryption Method</legend>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="algorithm" id="sym" value="symmetric" checked>
+                                <label class="form-check-label" for="sym">
+                                    Symmetric (AES-256)
+                                    <small class="text-muted d-block">Faster, uses a single shared key.</small>
+                                </label>
+                            </div>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="radio" name="algorithm" id="asym" value="asymmetric">
+                                <label class="form-check-label" for="asym">
+                                    Asymmetric (RSA Hybrid)
+                                    <small class="text-muted d-block">More secure, uses Public/Private keys.</small>
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Encrypt & Download</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
