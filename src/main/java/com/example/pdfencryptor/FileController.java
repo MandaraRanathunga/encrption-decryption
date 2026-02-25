@@ -22,22 +22,21 @@ public class FileController {
             @RequestParam("algorithm") String algorithm) {
 
         try {
-            byte[] encryptedData;
-            String filename = "encrypted_" + file.getOriginalFilename();
+           byte[] encryptedData;   // ← this is the actual variable name
 
-            if ("asymmetric".equalsIgnoreCase(algorithm)) {
-                encryptedData = encryptionService.encryptAsymmetric(file.getBytes());
-            } else {
-                encryptedData = encryptionService.encryptSymmetric(file.getBytes());
-            }
+           // later inside if/else:
+        if ("asymmetric".equalsIgnoreCase(algorithm)) {
+        encryptedData = encryptionService.encryptAsymmetric(file.getBytes());
+             } else {
+                 encryptedData = encryptionService.encryptSymmetric(file.getBytes());
+                      }
 
             ByteArrayResource resource = new ByteArrayResource(encryptedData);
 
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
-                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                    .contentLength(encryptedData.length)
-                    .body(resource);
+             return ResponseEntity.ok()
+              .contentType(MediaType.APPLICATION_PDF)
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"encrypted.pdf\"")
+        .body(resource);
 
         } catch (Exception e) {
             e.printStackTrace();
