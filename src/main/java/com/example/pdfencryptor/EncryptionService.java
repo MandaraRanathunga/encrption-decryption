@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 
@@ -80,5 +81,46 @@ public class EncryptionService {
         System.arraycopy(encryptedFile, 0, result, 4 + encryptedKey.length, encryptedFile.length);
 
         return result;
+    }
+
+    /**
+     * Decrypt Symmetric (AES)
+     */
+    public byte[] decryptSymmetric(byte[] encryptedData) throws Exception {
+        Cipher cipher = Cipher.getInstance(AES);
+        cipher.init(Cipher.DECRYPT_MODE, staticAesKey);
+        return cipher.doFinal(encryptedData);
+    }
+
+    /**
+     * Decrypt Asymmetric (RSA Hybrid)
+     */
+    public byte[] decryptAsymmetric(byte[] encryptedData) throws Exception {
+        // 1. Extract Key Length
+        int keyLength = ((encryptedData[0] & 0xFF) << 24) |
+                        ((encryptedData[1] & 0xFF) << 16) |
+                        ((encryptedData[2] & 0xFF) << 8) |
+                        (encryptedData[3] & 0xFF);
+
+        // 2. Extract Encrypted Key
+        byte[] encryptedKey = new byte[keyLength];
+        System.arraycopy(encryptedData, 4, encryptedKey, 0, keyLength);
+
+        // 3. Extract Encrypted File Content
+        int fileStart = 4 + keyLength;
+        int fileLength = encryptedData.length - fileStart;
+        byte[] encryptedFile = new byte[fileLength];
+        System.arraycopy(encryptedData, fileStart, encryptedFile, 0, fileLength);
+
+        // 4. Decrypt the AES Key with RSA Private Key
+        Cipher rsaCipher = Cipher.getInstance(RSA);
+        rsaCipher.init(Cipher.DECRYPT_MODE, serverRsaKeyPair.getPrivate());
+        byte[] decodedKey = rsaCipher.doFinal(encryptedKey);
+        SecretKey originalKey = new SecretKeySpec(decodedKey, AES);
+
+        // 5. Decrypt the File with the AES Key
+        Cipher aesCipher = Cipher.getInstance(AES);
+        aesCipher.init(Cipher.DECRYPT_MODE, originalKey);
+        return aesCipher.doFinal(encryptedFile);
     }
 }

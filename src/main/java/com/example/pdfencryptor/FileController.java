@@ -43,4 +43,30 @@ public class FileController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @PostMapping("/decrypt")
+    public ResponseEntity<ByteArrayResource> decryptFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("algorithm") String algorithm) {
+
+        try {
+            byte[] decryptedData;
+            if ("asymmetric".equalsIgnoreCase(algorithm)) {
+                decryptedData = encryptionService.decryptAsymmetric(file.getBytes());
+            } else {
+                decryptedData = encryptionService.decryptSymmetric(file.getBytes());
+            }
+
+            ByteArrayResource resource = new ByteArrayResource(decryptedData);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_PDF)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"decrypted.pdf\"")
+                    .body(resource);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }
