@@ -10,8 +10,9 @@
             background-color: #0f0c29;
             min-height: 100vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            padding: 2rem 0;
         }
         #binaryCanvas {
             position: fixed;
@@ -39,11 +40,11 @@
 <canvas id="binaryCanvas"></canvas>
 
 <div class="container">
-    <div class="row justify-content-center g-4">
+    <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header text-center bg-primary text-white">
-                    <h3>Encryption</h3>
+                    <h3>PDF Encryptor</h3>
                 </div>
                 <div class="card-body">
                     <form action="/upload" method="post" enctype="multipart/form-data">
@@ -73,44 +74,6 @@
 
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg">Encrypt & Download</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header text-center bg-success text-white">
-                    <h3>Decryption</h3>
-                </div>
-                <div class="card-body">
-                    <form action="/decrypt" method="post" enctype="multipart/form-data">
-                        
-                        <div class="mb-3">
-                            <label for="fileDecrypt" class="form-label">Select Encrypted PDF</label>
-                            <input class="form-control" type="file" id="fileDecrypt" name="file" accept=".pdf" required>
-                        </div>
-
-                        <fieldset class="mb-3">
-                            <legend class="col-form-label pt-0">Decryption Method</legend>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="algorithm" id="symDecrypt" value="symmetric" checked>
-                                <label class="form-check-label" for="symDecrypt">
-                                    Symmetric (AES-256)
-                                    <small class="text-muted d-block">Faster, uses a single shared key.</small>
-                                </label>
-                            </div>
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="radio" name="algorithm" id="asymDecrypt" value="asymmetric">
-                                <label class="form-check-label" for="asymDecrypt">
-                                    Asymmetric (RSA Hybrid)
-                                    <small class="text-muted d-block">More secure, uses Public/Private keys.</small>
-                                </label>
-                            </div>
-                        </fieldset>
-
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-success btn-lg">Decrypt & Download</button>
                         </div>
                     </form>
                 </div>
